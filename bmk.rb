@@ -33,7 +33,7 @@ end
 class ButtonMash
   HIGHSCORE_FILENAME = 'highscore'
 	DEFAULT_DIFFICULTY = "1"
-	DIFFICULTY_TIME = { "1" => 40, "2" => 30, "3" => 20, "4" => 10, "5" => 1 }
+	DIFFICULTY_TIME = { "no" => 40, "maybe" => 30, "kinda" => 20, "yes" => 10, "hacks" => 1 }
 
 	attr_reader :count
   attr_reader :name
@@ -46,13 +46,47 @@ class ButtonMash
 	def increase_count
 		@count += 1
 	end
-
+	
+	def show_countdown
+		sleep 1
+		clear
+		puts "5"
+		sleep 1
+		clear
+		puts "4"
+		sleep 1
+		clear
+		puts "3"
+		sleep 1
+		clear
+		puts "2"
+		sleep 1
+		clear 
+		puts "1"
+		sleep 1
+		clear
+		puts "Go!"
+		sleep 0.4
+	end
+	def show_signup
+	  if @signup == "yes"
+	    puts "Welcome Newbie! Please Input A Username: "
+		@name = gets.strip
+	  end
+	  
+	  if @signup == "no"
+		puts "Identification Please:"
+		puts "Username: "
+		@name = gets.strip
+	  end
+	end
 	def show_intro
       clear
-      puts "Welcome Young Button Masher...Are You Ready To Mash?"
-      puts "What Is Your Name?"
-      @name = gets.strip
-      puts "How Extreme Are You? 1,2,3,4"
+      puts "For Years, The World Has Been Searching For A ButtonMash King...Will It Be You?"
+      puts "Are you new to the Mash? yes,no"
+	  @signup = gets.strip
+	  show_signup
+      puts "Do you even mash? no,maybe,kinda,yes"
     end
 
     def show_finalscore
@@ -74,6 +108,9 @@ class ButtonMash
 		show_intro
 
         diff = gets.strip
+		
+		show_countdown
+		
         curses_start
         start_time = Time.now
 
@@ -92,9 +129,9 @@ class ButtonMash
 
       if score_keeper.get_score(name) > count
         clear
-        puts "Maybe Next Time!"
+        puts "    Maybe Next Time!"
       else
-        puts "Setting score"
+        puts "    New HighScore!"
       score_keeper.set_score(name, count)
     end
 
