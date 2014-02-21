@@ -1,6 +1,6 @@
 require 'curses'
 require 'yaml'
-
+require 'gosu'
 
 class ScoreKeeper
 
@@ -41,6 +41,8 @@ class ButtonMash
 	def initialize
       @count = 0
       @score_keeper = ScoreKeeper.new(HIGHSCORE_FILENAME)
+	  @music = Gosu::Sample.new(self, "C:\Users\Neython\Downloads\chiptune.mp3")
+	  @music.play
 	end
 
 	def increase_count
@@ -138,7 +140,7 @@ class ButtonMash
       score_keeper.save_scores
       show_finalscore
 	end
-
+	
   def clear
 	system("clear")
   end
