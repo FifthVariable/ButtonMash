@@ -41,8 +41,8 @@ class ButtonMash
 	def initialize
       @count = 0
       @score_keeper = ScoreKeeper.new(HIGHSCORE_FILENAME)
-	  @music = Gosu::Sample.new(self, "C:\Users\Neython\Downloads\chiptune.mp3")
-	  @music.play
+	    @music = Gosu::Sample.new(Gosu::Window.new(100,100,true), "chiptune.mp3" )
+	    @music.play
 	end
 
 	def increase_count
@@ -84,6 +84,7 @@ class ButtonMash
 	end
 	def show_intro
       clear
+
       puts "For Years, The World Has Been Searching For A ButtonMash King...Will It Be You?"
       puts "Are you new to the Mash? yes,no"
 	  @signup = gets.strip
@@ -115,17 +116,24 @@ class ButtonMash
 		
         curses_start
         start_time = Time.now
+        button_next_to_mash = 'right'
 
         while (Time.now - start_time) <= get_difficulty_time(diff)  do
         	case Curses.getch
   			when Curses::Key::RIGHT
-    			increase_count
-    			Curses.setpos(0,0)
-    			Curses.addstr("#{count}")
+          if button_next_to_mash == 'right'
+    			 increase_count
+    			 Curses.setpos(0,0)
+    			 Curses.addstr("#{count}")
+           button_next_to_mash = 'left'
+          end
   			when Curses::Key::LEFT
-   				increase_count
-    			Curses.setpos(0,0)
-    			Curses.addstr("#{count}")
+          if button_next_to_mash == 'left'
+   				 increase_count
+    			 Curses.setpos(0,0)
+    			 Curses.addstr("#{count}")
+           button_next_to_mash = 'right'
+          end
   			end
   		end
 
