@@ -41,7 +41,7 @@ class ButtonMash
 	def initialize
       @count = 0
       @score_keeper = ScoreKeeper.new(HIGHSCORE_FILENAME)
-	    @music = Gosu::Sample.new(Gosu::Window.new(100,100,true), "chiptune.mp3" )
+	    @music = Gosu::Sample.new(Gosu::Window.new(100,100,false), "Media/chiptune.mp3" )
 	    @music.play
 	end
 
