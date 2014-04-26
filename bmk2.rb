@@ -8,25 +8,25 @@ class TextField < Gosu::TextInput
   SELECTION_COLOR = 0xcc0000ff
   CARET_COLOR     = 0xffffffff
   PADDING = 5
-  
+
   attr_reader :x, :y
-  
+
   def initialize(window, font, x, y)
     # TextInput's constructor doesn't expect any arguments.
     super()
-    
+
     @window, @font, @x, @y = window, font, x, y
-    
+
     # Start with a self-explanatory text in each field.
     self.text = "Click to change text"
   end
-  
+
   # Example filter method. You can truncate the text to employ a length limit (watch out
   # with Ruby 1.8 and UTF-8!), limit the text to certain characters etc.
   def filter text
     text.upcase
   end
-  
+
   def draw
     # Depending on whether this is the currently selected input or not, change the
     # background's color.
@@ -39,11 +39,11 @@ class TextField < Gosu::TextInput
                       x + width + PADDING, y - PADDING,          background_color,
                       x - PADDING,         y + height + PADDING, background_color,
                       x + width + PADDING, y + height + PADDING, background_color, 0)
-    
+
     # Calculate the position of the caret and the selection start.
     pos_x = x + @font.text_width(self.text[0...self.caret_pos])
     sel_x = x + @font.text_width(self.text[0...self.selection_start])
-    
+
     # Draw the selection background, if any; if not, sel_x and pos_x will be
     # the same value, making this quad empty.
     @window.draw_quad(sel_x, y,          SELECTION_COLOR,
@@ -66,7 +66,7 @@ class TextField < Gosu::TextInput
   def width
     @font.text_width(self.text)
   end
-  
+
   def height
     @font.height
   end
@@ -76,7 +76,7 @@ class TextField < Gosu::TextInput
     mouse_x > x - PADDING and mouse_x < x + width + PADDING and
       mouse_y > y - PADDING and mouse_y < y + height + PADDING
   end
-  
+
   # Tries to move the caret to the position specifies by mouse_x
   def move_caret(mouse_x)
     # Test character by character
@@ -114,7 +114,7 @@ class ScoreKeeper
   end
 
   def save_scores
-    File.open(filename, 'w') do |f| 
+    File.open(filename, 'w') do |f|
       f.write({ 'highscores' => data }.to_yaml)
     end
   end
@@ -125,20 +125,20 @@ class TextInputWindow < Gosu::Window
   def initialize
     super(300, 200, false)
     self.caption = "Text Input Example"
-    
+
     font = Gosu::Font.new(self, Gosu::default_font_name, 20)
-    
+
     # Set up an array of three text fields.
     @text_fields = Array.new(3) { |index| TextField.new(self, font, 50, 30 + index * 50) }
-    
+
     @cursor = Gosu::Image.new(self, "media/Cursor.png", false)
   end
-  
+
   def draw
     @text_fields.each { |tf| tf.draw }
     @cursor.draw(mouse_x, mouse_y, 0)
   end
-  
+
   def button_down(id)
     if id == Gosu::KbTab then
       # Tab key will not be 'eaten' by text fields; use for switching through
@@ -162,56 +162,56 @@ class TextInputWindow < Gosu::Window
 end
 
 
-#class ButtonMashWindow < Gosu::Window 
+class ButtonMashWindow < Gosu::Window
 
-	#def initialize
-		#super(600,600,false)
-		#self.caption = "ButtonmashKing"
-		#@font = Gosu::Font.new(self, Gosu::default_font_name, 20)
-		#@cursor = Gosu::Image.new(self, "Media/cursor.png")
-		#@text_field = TextField.new(self, @font, 50, 30)
-		#@counter = 0
-	#end
+	def initialize
+		super(600,600,false)
+		self.caption = "ButtonmashKing"
+		@font = Gosu::Font.new(self, Gosu::default_font_name, 20)
+		@cursor = Gosu::Image.new(self, "Media/cursor.png")
+		@text_field = TextField.new(self, @font, 50, 30)
+		@counter = 0
+	end
 
-	#def update
+	def update
 
-	#end
+	end
 
-	#def draw
-	#	@text_field.draw
-	#	@cursor.draw(mouse_x, mouse_y, 0)
-	 	#@font.draw(@counter, 0, 0, 1)
-	#end
+	def draw
+		@text_field.draw
+		@cursor.draw(mouse_x, mouse_y, 0)
+	 	@font.draw(@counter, 0, 0, 1)
+	end
 
-	#def button_down(id)
-      #if id == Gosu::KbEscape
-      #	if @text_input
-      		#@text_input = nil
-      	#end
-     # end
+	def button_down(id)
+      if id == Gosu::KbEscape
+      	if @text_input
+      		@text_input = nil
+      	end
+      end
 
 
-     # if id == Gosu::MsLeft
-      #  if @text_field.under_point?(mouse_x, mouse_y)
-        #	@text_input = @text_field
-       # end
+      if id == Gosu::MsLeft
+        if @text_field.under_point?(mouse_x, mouse_y)
+        	@text_input = @text_field
+        end
 
-     #   @text_input.move_caret(mouse_x) unless @text_input.nil?
-        
-     # end
-	#end
+        @text_input.move_caret(mouse_x) unless @text_input.nil?
 
-	#def button_down(id)
-	#	if id == Gosu::KbLeft
-	#		@counter += 1
-	#	end
-    #
-	#	if id == Gosu::KbRight
-	#		@counter += 1
-	#	end
-	#end
+      end
+	end
 
-#end
+	def button_down(id)
+		if id == Gosu::KbLeft
+			@counter += 1
+		end
+
+		if id == Gosu::KbRight
+			@counter += 1
+		end
+	end
+
+end
 
 window = ButtonMashWindow.new
 window.show
